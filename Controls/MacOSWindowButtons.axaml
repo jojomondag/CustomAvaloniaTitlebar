@@ -1,0 +1,122 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:svg="using:Avalonia.Svg.Skia"
+             x:Class="Avalonia.FlexibleWindowControls.Controls.MacOSWindowButtons"
+             x:Name="Root">
+    <StackPanel Name="MacOSButtonsStack"
+               Orientation="Horizontal"
+               Spacing="{Binding #Root.ButtonSpacing}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left">
+        <!-- Close Button (Red) -->
+        <Button Name="CloseButton"
+               Width="{Binding #Root.ButtonSize}" 
+               Height="{Binding #Root.ButtonSize}"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="0"
+               Cursor="Hand"
+               ToolTip.Tip="Close"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                            Background="Transparent"
+                                            Content="{TemplateBinding Content}"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </ControlTemplate>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <Style Selector="Button:pressed /template/ ContentPresenter">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </Button.Styles>
+            <svg:Svg Name="CloseIcon"
+                     Path="avares://Avalonia.FlexibleWindowControls/Icons/MacOS/close-normal.svg"
+                     Width="{Binding #Root.ButtonSize}"
+                     Height="{Binding #Root.ButtonSize}"/>
+        </Button>
+
+        <!-- Minimize Button (Yellow) -->
+        <Button Name="MinimizeButton"
+               Width="{Binding #Root.ButtonSize}" 
+               Height="{Binding #Root.ButtonSize}"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="0"
+               Cursor="Hand"
+               ToolTip.Tip="Minimize"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                            Background="Transparent"
+                                            Content="{TemplateBinding Content}"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </ControlTemplate>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <Style Selector="Button:pressed /template/ ContentPresenter">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </Button.Styles>
+            <svg:Svg Name="MinimizeIcon"
+                     Path="avares://Avalonia.FlexibleWindowControls/Icons/MacOS/minimize-normal.svg"
+                     Width="{Binding #Root.ButtonSize}"
+                     Height="{Binding #Root.ButtonSize}"/>
+        </Button>
+
+        <!-- Maximize/Restore Button (Green) -->
+        <Button Name="MaximizeButton"
+               Width="{Binding #Root.ButtonSize}" 
+               Height="{Binding #Root.ButtonSize}"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="0"
+               Cursor="Hand"
+               ToolTip.Tip="Maximize"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                            Background="Transparent"
+                                            Content="{TemplateBinding Content}"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </ControlTemplate>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+                <Style Selector="Button:pressed /template/ ContentPresenter">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </Button.Styles>
+            <svg:Svg Name="MaximizeIcon"
+                     Path="avares://Avalonia.FlexibleWindowControls/Icons/MacOS/maximize-normal.svg"
+                     Width="{Binding #Root.ButtonSize}"
+                     Height="{Binding #Root.ButtonSize}"/>
+        </Button>
+    </StackPanel>
+</UserControl>
