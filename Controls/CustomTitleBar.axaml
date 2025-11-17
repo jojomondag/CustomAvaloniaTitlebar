@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:materialIcons="using:Material.Icons.Avalonia"
              xmlns:controls="using:Avalonia.FlexibleWindowControls.Controls"
+             xmlns:svg="using:Avalonia.Svg.Skia"
              x:Class="Avalonia.FlexibleWindowControls.Controls.CustomTitleBar"
              x:Name="Root">
     <Grid Name="TitleBarGrid"
@@ -22,77 +22,12 @@
                                     ShowIconsOnHover="True"
                                     IsVisible="False"/>
 
-        <!-- Windows/Linux Window Control Buttons (Right side) -->
-        <StackPanel Name="WindowsControls"
-                   Grid.Column="3" 
-                   Orientation="Horizontal" 
-                   Margin="0,0,8,0"
-                   Spacing="0"
-                   VerticalAlignment="Center"
-                   IsVisible="False">
-            <!-- Minimize Button -->
-            <Button Name="WindowsMinimizeButton"
-                   Width="46" 
-                   Height="32"
-                   Background="Transparent"
-                   BorderThickness="0"
-                   Padding="0"
-                   ToolTip.Tip="Minimize">
-                <Button.Styles>
-                    <Style Selector="Button:pointerover">
-                        <Setter Property="Background" Value="{DynamicResource BackgroundTertiaryBrush}"/>
-                    </Style>
-                </Button.Styles>
-                <materialIcons:MaterialIcon Name="WindowsMinimizeIcon"
-                                           Kind="Remove" 
-                                           Width="12" 
-                                           Height="12"
-                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
-            </Button>
-
-            <!-- Maximize/Restore Button -->
-            <Button Name="WindowsMaximizeButton"
-                   Width="46" 
-                   Height="32"
-                   Background="Transparent"
-                   BorderThickness="0"
-                   Padding="0"
-                   ToolTip.Tip="Maximize">
-                <Button.Styles>
-                    <Style Selector="Button:pointerover">
-                        <Setter Property="Background" Value="{DynamicResource BackgroundTertiaryBrush}"/>
-                    </Style>
-                </Button.Styles>
-                <materialIcons:MaterialIcon Name="WindowsMaximizeIcon"
-                                           Kind="Fullscreen" 
-                                           Width="12" 
-                                           Height="12"
-                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
-            </Button>
-
-            <!-- Close Button -->
-            <Button Name="WindowsCloseButton"
-                   Width="46" 
-                   Height="32"
-                   Background="Transparent"
-                   BorderThickness="0"
-                   Padding="0"
-                   ToolTip.Tip="Close">
-                <Button.Styles>
-                    <Style Selector="Button:pointerover">
-                        <Setter Property="Background" Value="#E81123"/>
-                    </Style>
-                    <Style Selector="Button:pointerover /template/ ContentPresenter /template/ materialIcons|MaterialIcon">
-                        <Setter Property="Foreground" Value="White"/>
-                    </Style>
-                </Button.Styles>
-                <materialIcons:MaterialIcon Name="WindowsCloseIcon"
-                                           Kind="Close" 
-                                           Width="12" 
-                                           Height="12"
-                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
-            </Button>
-        </StackPanel>
+            <!-- Windows/Linux Window Control Buttons (Right side) -->
+            <controls:WindowsWindowButtons Name="WindowsControls"
+                                          Grid.Column="3"
+                                          Margin="0,0,8,0"
+                                          ShowIconsOnHover="True"
+                                          IsVisible="False"/>
 
         <!-- Centered Application Title -->
         <TextBlock Name="TitleTextBlock"

@@ -6,6 +6,7 @@ C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\obj\Debug\net9.0\Avalonia
 C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\obj\Debug\net9.0\Avalonia\resources
 C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\obj\Debug\net9.0\Avalonia.FlexibleWindowControls.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\obj\Debug\net9.0\Avalonia.FlexibleWindowControls.csproj.CoreCompileInputs.cache
+C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\obj\Debug\net9.0\Avalonia.FlexibleWindowControls.sourcelink.json
 C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\obj\Debug\net9.0\Avalonia.FlexibleWindowControls.dll
 C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\obj\Debug\net9.0\refint\Avalonia.FlexibleWindowControls.dll
 C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\obj\Debug\net9.0\Avalonia.FlexibleWindowControls.pdb

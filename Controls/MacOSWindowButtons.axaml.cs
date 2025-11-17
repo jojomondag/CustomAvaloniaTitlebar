@@ -228,7 +228,16 @@ public partial class MacOSWindowButtons : UserControl
             process.StandardInput.Write(appleScript);
             process.StandardInput.Close(); // Signal that we're done writing
             Debug.WriteLine("Waiting for process to exit...");
-            process.WaitForExit();
+            // Use WaitForExit with timeout to prevent hanging (5 second timeout)
+            if (!process.WaitForExit(5000))
+            {
+                Debug.WriteLine("Process did not exit within timeout, killing it...");
+                try
+                {
+                    process.Kill();
+                }
+                catch { }
+            }
             Debug.WriteLine($"Process exited with code: {process.ExitCode}");
         }
         catch (Exception ex)
@@ -239,6 +248,14 @@ public partial class MacOSWindowButtons : UserControl
         }
         finally
         {
+            try
+            {
+                if (process != null && !process.HasExited)
+                {
+                    process.Kill();
+                }
+            }
+            catch { }
             process?.Dispose();
         }
     }

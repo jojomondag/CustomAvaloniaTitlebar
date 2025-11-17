@@ -3,8 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using Material.Icons;
-using Material.Icons.Avalonia;
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -26,12 +24,8 @@ public partial class CustomTitleBar : UserControl
     private DispatcherTimer? _weekTimer;
     private TextBlock? _titleText;
     private TextBlock? _titleTime;
-    private Button? _minimizeButton;
-    private Button? _maximizeButton;
-    private Button? _closeButton;
-    private MaterialIcon? _maximizeIcon;
     private MacOSWindowButtons? _macOSControls;
-    private StackPanel? _windowsControls;
+    private WindowsWindowButtons? _windowsControls;
     private bool _isMacOS;
     private PlatformStyle _currentPlatformStyle = PlatformStyle.Auto;
 
@@ -96,7 +90,7 @@ public partial class CustomTitleBar : UserControl
         
         // Get platform-specific controls
         _macOSControls = this.FindControl<MacOSWindowButtons>("MacOSControls");
-        _windowsControls = this.FindControl<StackPanel>("WindowsControls");
+            _windowsControls = this.FindControl<WindowsWindowButtons>("WindowsControls");
         
         // Determine platform style
         if (_currentPlatformStyle == PlatformStyle.Auto)
@@ -107,9 +101,6 @@ public partial class CustomTitleBar : UserControl
         {
             _isMacOS = _currentPlatformStyle == PlatformStyle.MacOS;
         }
-        
-        // Wire up Windows controls (macOS controls are self-contained in the component)
-        WireUpWindowsControls();
         
         // Apply the initial platform style
         ApplyPlatformStyle();
@@ -146,18 +137,6 @@ public partial class CustomTitleBar : UserControl
         // Initialize and start the week display
         UpdateWeek();
         StartWeekTimer();
-        
-        // Update maximize icon based on initial window state (Windows/Linux only)
-        if (!_isMacOS)
-        {
-            UpdateMaximizeIcon();
-        }
-
-        // Subscribe to window state changes
-        if (_parentWindow != null)
-        {
-            _parentWindow.PropertyChanged += OnWindowStateChanged;
-        }
     }
 
     /// <summary>
@@ -171,49 +150,6 @@ public partial class CustomTitleBar : UserControl
         _parentWindow.WindowState = _parentWindow.WindowState == WindowState.Maximized 
             ? WindowState.Normal 
             : WindowState.Maximized;
-    }
-    
-    /// <summary>
-    /// Updates the maximize/restore icon based on current window state (Windows/Linux only)
-    /// </summary>
-    private void UpdateMaximizeIcon()
-    {
-        if (_parentWindow == null)
-            return;
-
-        // Only update icon for Windows/Linux (macOS uses colored circles, no icons)
-        if (!_isMacOS && _maximizeIcon != null)
-        {
-            // Use different icons for maximize vs restore
-            // For maximized state, show restore icon (exit fullscreen)
-            // For normal state, show maximize icon (enter fullscreen)
-            if (_parentWindow.WindowState == WindowState.Maximized)
-            {
-                _maximizeIcon.Kind = MaterialIconKind.FullscreenExit;
-            }
-            else
-            {
-                _maximizeIcon.Kind = MaterialIconKind.Fullscreen;
-            }
-        }
-        
-        // Update tooltip (works for both platforms)
-        if (_maximizeButton != null)
-        {
-            ToolTip.SetTip(_maximizeButton, 
-                _parentWindow.WindowState == WindowState.Maximized ? "Restore" : "Maximize");
-        }
-    }
-    
-    /// <summary>
-    /// Handles window state changes to update the maximize icon (Windows/Linux only)
-    /// </summary>
-    private void OnWindowStateChanged(object? sender, Avalonia.AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.Property == Window.WindowStateProperty && !_isMacOS)
-        {
-            UpdateMaximizeIcon();
-        }
     }
 
     /// <summary>
@@ -246,54 +182,6 @@ public partial class CustomTitleBar : UserControl
         }
     }
 
-    /// <summary>
-    /// Sets the centered text in the titlebar
-    /// </summary>
-    /// <param name="text">Text to display in the center</param>
-    public void SetTitlebarText(string? text = null)
-    {
-        TitleText = text ?? "Application";
-        
-        // Also update the window title for taskbar/alt-tab
-        if (_parentWindow != null)
-        {
-            _parentWindow.Title = text ?? "Application";
-        }
-    }
-
-    /// <summary>
-    /// Wires up Windows/Linux controls
-    /// </summary>
-    private void WireUpWindowsControls()
-    {
-        if (_windowsControls == null || _parentWindow == null)
-            return;
-
-        // Get Windows/Linux button references
-        var windowsMinimizeButton = this.FindControl<Button>("WindowsMinimizeButton");
-        var windowsMaximizeButton = this.FindControl<Button>("WindowsMaximizeButton");
-        var windowsCloseButton = this.FindControl<Button>("WindowsCloseButton");
-        _maximizeIcon = this.FindControl<MaterialIcon>("WindowsMaximizeIcon");
-        
-        // Wire up Windows/Linux buttons
-        if (windowsMinimizeButton != null)
-        {
-            windowsMinimizeButton.Click += (sender, e) => _parentWindow.WindowState = WindowState.Minimized;
-        }
-        if (windowsMaximizeButton != null)
-        {
-            windowsMaximizeButton.Click += (sender, e) => ToggleMaximize();
-        }
-        if (windowsCloseButton != null)
-        {
-            windowsCloseButton.Click += (sender, e) => _parentWindow?.Close();
-        }
-        
-        // Store references for maximize icon updates
-        _minimizeButton = windowsMinimizeButton;
-        _maximizeButton = windowsMaximizeButton;
-        _closeButton = windowsCloseButton;
-    }
 
     /// <summary>
     /// Applies the current platform style to show/hide appropriate controls
@@ -312,12 +200,6 @@ public partial class CustomTitleBar : UserControl
         {
             _macOSControls.IsVisible = false;
             _windowsControls.IsVisible = true;
-        }
-
-        // Update maximize icon if needed
-        if (!_isMacOS)
-        {
-            UpdateMaximizeIcon();
         }
     }
 

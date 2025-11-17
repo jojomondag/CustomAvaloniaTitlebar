@@ -1,0 +1,126 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:svg="using:Avalonia.Svg.Skia"
+             x:Class="Avalonia.FlexibleWindowControls.Controls.WindowsWindowButtons"
+             x:Name="Root">
+    <StackPanel Name="WindowsButtonsStack"
+               Orientation="Horizontal"
+               Spacing="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Right">
+        <!-- Minimize Button -->
+        <Button Name="MinimizeButton"
+               Width="46"
+               Height="32"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="0"
+               Cursor="Hand"
+               ToolTip.Tip="Minimize"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                            Background="Transparent"
+                                            Content="{TemplateBinding Content}"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </ControlTemplate>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundTertiaryBrush}"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style Selector="Button:pressed /template/ ContentPresenter">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundTertiaryBrush}"/>
+                </Style>
+            </Button.Styles>
+            <svg:Svg Name="MinimizeIcon"
+                     Path="avares://Avalonia.FlexibleWindowControls/Icons/WinOS/minimize-normal.svg"
+                     Width="{Binding #Root.IconSize}"
+                     Height="{Binding #Root.IconSize}"
+                     Opacity="1"/>
+        </Button>
+
+        <!-- Maximize/Restore Button -->
+        <Button Name="MaximizeButton"
+               Width="46"
+               Height="32"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="0"
+               Cursor="Hand"
+               ToolTip.Tip="Maximize"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                            Background="Transparent"
+                                            Content="{TemplateBinding Content}"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </ControlTemplate>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundTertiaryBrush}"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style Selector="Button:pressed /template/ ContentPresenter">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundTertiaryBrush}"/>
+                </Style>
+            </Button.Styles>
+            <svg:Svg Name="MaximizeIcon"
+                     Path="avares://Avalonia.FlexibleWindowControls/Icons/WinOS/maximize-normal.svg"
+                     Width="{Binding #Root.IconSize}"
+                     Height="{Binding #Root.IconSize}"/>
+        </Button>
+
+        <!-- Close Button -->
+        <Button Name="CloseButton"
+               Width="46"
+               Height="32"
+               Background="Transparent"
+               BorderThickness="0"
+               Padding="0"
+               Cursor="Hand"
+               ToolTip.Tip="Close"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                            Background="Transparent"
+                                            Content="{TemplateBinding Content}"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </ControlTemplate>
+                    </Setter>
+                </Style>
+                <Style Selector="Button:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="#E81123"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style Selector="Button:pressed /template/ ContentPresenter">
+                    <Setter Property="Background" Value="#E81123"/>
+                </Style>
+            </Button.Styles>
+            <svg:Svg Name="CloseIcon"
+                     Path="avares://Avalonia.FlexibleWindowControls/Icons/WinOS/close-normal.svg"
+                     Width="{Binding #Root.IconSize}"
+                     Height="{Binding #Root.IconSize}"/>
+        </Button>
+    </StackPanel>
+</UserControl>

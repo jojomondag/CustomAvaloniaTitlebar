@@ -5,9 +5,14 @@
         Title="Custom Titlebar Demo"
         Width="800"
         Height="600"
+        WindowState="Normal"
+        ShowInTaskbar="True"
+        CanResize="True"
+        SystemDecorations="None"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaTitleBarHeightHint="40">
+        ExtendClientAreaTitleBarHeightHint="40"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -49,6 +54,10 @@
                 <StackPanel Orientation="Horizontal"
                            HorizontalAlignment="Center"
                            Spacing="10">
+                    <Button Name="ActivateButton"
+                           Content="Activate Window"
+                           Padding="20,10"
+                           Click="OnActivateButtonClick"/>
                     <Button Name="WindowsButton"
                            Content="Windows"
                            Padding="20,10"
@@ -84,6 +93,23 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"/>
                 </Border>
+                
+                                    <!-- Large Windows Buttons Display Area -->
+                                    <Border Name="WindowsIconDisplayArea"
+                                                   Margin="0,30,0,0"
+                                                   Padding="40"
+                                                   Background="{DynamicResource BackgroundSecondaryBrush}"
+                                                   CornerRadius="8"
+                                                   HorizontalAlignment="Center"
+                                                   MinWidth="300"
+                                                   MinHeight="200"
+                                                   IsVisible="False">
+                                            <controls:WindowsWindowButtons Name="LargeWindowsButtons"
+                                                                                                                  IconSize="48"
+                                                                                                                  ShowIconsOnHover="False"
+                                                                                                                  HorizontalAlignment="Center"
+                                                                                                                  VerticalAlignment="Center"/>
+                                    </Border>
             </StackPanel>
         </Border>
     </Grid>
