@@ -15,7 +15,7 @@
         <!-- Left Side Content -->
         <StackPanel Grid.Column="0" 
                     Orientation="Horizontal"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Stretch"
                     Margin="12,0,0,0">
             
             <!-- macOS Window Control Buttons (Hidden, using native) -->
@@ -35,6 +35,7 @@
                       VerticalAlignment="Center"
                       FontSize="16"
                       Foreground="{DynamicResource TextPrimaryBrush}"
+                      Margin="12,0,0,0"
                       IsVisible="False"/>
         </StackPanel>
 
@@ -66,7 +67,7 @@
                       Margin="0,0,12,0"
                       IsVisible="False"/>
 
-            <!-- Windows/Linux Window Control Buttons -->
+            <!-- Windows/Linux Window Control Buttons (Hidden, using native) -->
             <controls:WindowsWindowButtons Name="WindowsControls"
                                           ShowIconsOnHover="True"
                                           IsVisible="False"/>

@@ -42,68 +42,7 @@
                           HorizontalAlignment="Center"
                           Margin="0,20,0,0"/>
                 
-                <Separator Margin="0,30,0,20"/>
-                
-                <TextBlock Text="Switch Titlebar Style:"
-                          FontSize="18"
-                          FontWeight="SemiBold"
-                          HorizontalAlignment="Center"
-                          Margin="0,0,0,10"/>
-                <StackPanel Orientation="Horizontal"
-                           HorizontalAlignment="Center"
-                           Spacing="10">
-                    <Button Name="WindowsButton"
-                           Content="Windows"
-                           Padding="20,10"
-                           Click="OnWindowsButtonClick"/>
-                    <Button Name="MacOSButton"
-                           Content="macOS"
-                           Padding="20,10"
-                           Click="OnMacOSButtonClick"/>
-                    <Button Name="LinuxButton"
-                           Content="Linux"
-                           Padding="20,10"
-                           Click="OnLinuxButtonClick"/>
-                    <Button Name="AutoButton"
-                           Content="Auto"
-                           Padding="20,10"
-                           Click="OnAutoButtonClick"/>
-                </StackPanel>
-                
-                <!-- Large macOS Buttons Display Area -->
-                <Border Name="IconDisplayArea"
-                       Margin="0,30,0,0"
-                       Padding="40"
-                       Background="{DynamicResource BackgroundSecondaryBrush}"
-                       CornerRadius="8"
-                       HorizontalAlignment="Center"
-                       MinWidth="300"
-                       MinHeight="200"
-                       IsVisible="False">
-                    <controls:MacOSWindowButtons Name="LargeMacOSButtons"
-                                                ButtonSize="48"
-                                                ButtonSpacing="32"
-                                                ShowIconsOnHover="False"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"/>
-                </Border>
-                
-                                    <!-- Large Windows Buttons Display Area -->
-                                    <Border Name="WindowsIconDisplayArea"
-                                                   Margin="0,30,0,0"
-                                                   Padding="40"
-                                                   Background="{DynamicResource BackgroundSecondaryBrush}"
-                                                   CornerRadius="8"
-                                                   HorizontalAlignment="Center"
-                                                   MinWidth="300"
-                                                   MinHeight="200"
-                                                   IsVisible="False">
-                                            <controls:WindowsWindowButtons Name="LargeWindowsButtons"
-                                                                                                                  IconSize="48"
-                                                                                                                  ShowIconsOnHover="False"
-                                                                                                                  HorizontalAlignment="Center"
-                                                                                                                  VerticalAlignment="Center"/>
-                                    </Border>
+
             </StackPanel>
         </Border>
     </Grid>

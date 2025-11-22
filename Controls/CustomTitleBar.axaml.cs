@@ -215,8 +215,9 @@ public partial class CustomTitleBar : UserControl
         else
         {
             // Windows Style: Week Left, Icons Right
+            // We use native buttons now, so hide custom controls
             _macOSControls.IsVisible = false;
-            _windowsControls.IsVisible = true;
+            _windowsControls.IsVisible = false;
             
             if (_titleTimeLeft != null) _titleTimeLeft.IsVisible = true;
             if (_titleTimeRight != null) _titleTimeRight.IsVisible = false;
