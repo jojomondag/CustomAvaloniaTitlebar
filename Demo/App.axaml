@@ -5,5 +5,9 @@
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+    
+    <Application.Resources>
+        <SolidColorBrush x:Key="BackgroundTertiaryBrush" Color="#19000000"/>
+    </Application.Resources>
 </Application>
 

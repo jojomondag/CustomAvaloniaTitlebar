@@ -23,7 +23,8 @@ public partial class CustomTitleBar : UserControl
     private Window? _parentWindow;
     private DispatcherTimer? _weekTimer;
     private TextBlock? _titleText;
-    private TextBlock? _titleTime;
+    private TextBlock? _titleTimeLeft;
+    private TextBlock? _titleTimeRight;
     private MacOSWindowButtons? _macOSControls;
     private WindowsWindowButtons? _windowsControls;
     private bool _isMacOS;
@@ -86,7 +87,8 @@ public partial class CustomTitleBar : UserControl
 
         // Get references to titlebar elements
         _titleText = this.FindControl<TextBlock>("TitleTextBlock");
-        _titleTime = this.FindControl<TextBlock>("TitleTime");
+        _titleTimeLeft = this.FindControl<TextBlock>("TitleTimeLeft");
+        _titleTimeRight = this.FindControl<TextBlock>("TitleTimeRight");
         
         // Get platform-specific controls
         _macOSControls = this.FindControl<MacOSWindowButtons>("MacOSControls");
@@ -170,16 +172,13 @@ public partial class CustomTitleBar : UserControl
     /// </summary>
     private void UpdateWeek()
     {
-        if (_titleTime != null)
-        {
-            var calendar = CultureInfo.CurrentCulture.Calendar;
-            var weekNumber = calendar.GetWeekOfYear(
-                DateTime.Now,
-                CalendarWeekRule.FirstFourDayWeek,
-                DayOfWeek.Monday
-            );
-            TimeText = $"Week {weekNumber}";
-        }
+        var calendar = CultureInfo.CurrentCulture.Calendar;
+        var weekNumber = calendar.GetWeekOfYear(
+            DateTime.Now,
+            CalendarWeekRule.FirstFourDayWeek,
+            DayOfWeek.Monday
+        );
+        TimeText = $"Week {weekNumber}";
     }
 
 
@@ -193,13 +192,21 @@ public partial class CustomTitleBar : UserControl
 
         if (_isMacOS)
         {
+            // macOS Style: Icons Left, Week Right
             _macOSControls.IsVisible = true;
             _windowsControls.IsVisible = false;
+            
+            if (_titleTimeLeft != null) _titleTimeLeft.IsVisible = false;
+            if (_titleTimeRight != null) _titleTimeRight.IsVisible = true;
         }
         else
         {
+            // Windows Style: Week Left, Icons Right
             _macOSControls.IsVisible = false;
             _windowsControls.IsVisible = true;
+            
+            if (_titleTimeLeft != null) _titleTimeLeft.IsVisible = true;
+            if (_titleTimeRight != null) _titleTimeRight.IsVisible = false;
         }
     }
 
@@ -223,6 +230,25 @@ public partial class CustomTitleBar : UserControl
         }
         
         ApplyPlatformStyle();
+    }
+    /// <summary>
+    /// Gets the screen coordinates of the maximize button if visible
+    /// </summary>
+    public Rect? GetMaximizeButtonBounds()
+    {
+        if (_windowsControls != null && _windowsControls.IsVisible)
+        {
+            return _windowsControls.GetMaximizeButtonBounds();
+        }
+        return null;
+    }
+
+    public void SetMaximizeHover(bool hover)
+    {
+        if (_windowsControls != null && _windowsControls.IsVisible)
+        {
+            _windowsControls.SetMaximizeHover(hover);
+        }
     }
 }
 

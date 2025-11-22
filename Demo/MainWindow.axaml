@@ -8,7 +8,6 @@
         WindowState="Normal"
         ShowInTaskbar="True"
         CanResize="True"
-        SystemDecorations="None"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="40"
@@ -54,10 +53,6 @@
                 <StackPanel Orientation="Horizontal"
                            HorizontalAlignment="Center"
                            Spacing="10">
-                    <Button Name="ActivateButton"
-                           Content="Activate Window"
-                           Padding="20,10"
-                           Click="OnActivateButtonClick"/>
                     <Button Name="WindowsButton"
                            Content="Windows"
                            Padding="20,10"

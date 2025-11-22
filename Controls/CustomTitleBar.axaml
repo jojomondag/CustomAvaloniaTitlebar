@@ -10,44 +10,64 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <!-- macOS Window Control Buttons (Left side - Traffic Lights) -->
-        <controls:MacOSWindowButtons Name="MacOSControls"
-                                    Grid.Column="0"
-                                    Margin="12,0,0,0"
-                                    ButtonSize="12"
-                                    ButtonSpacing="8"
-                                    ShowIconsOnHover="True"
-                                    IsVisible="False"/>
-
-            <!-- Windows/Linux Window Control Buttons (Right side) -->
-            <controls:WindowsWindowButtons Name="WindowsControls"
-                                          Grid.Column="3"
-                                          Margin="0,0,8,0"
-                                          ShowIconsOnHover="True"
-                                          IsVisible="False"/>
+        <!-- Left Side Content -->
+        <StackPanel Grid.Column="0" 
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Margin="12,0,0,0">
+            
+            <!-- macOS Window Control Buttons -->
+            <controls:MacOSWindowButtons Name="MacOSControls"
+                                        ButtonSize="12"
+                                        ButtonSpacing="8"
+                                        ShowIconsOnHover="True"
+                                        IsVisible="False"
+                                        Margin="0,0,12,0"/>
+            
+            <!-- Week/Time Display (Left - for Windows) -->
+            <TextBlock Name="TitleTimeLeft"
+                      Text="{Binding #Root.TimeText}"
+                      VerticalAlignment="Center"
+                      FontSize="16"
+                      Foreground="{DynamicResource TextPrimaryBrush}"
+                      IsVisible="False"/>
+        </StackPanel>
 
         <!-- Centered Application Title -->
+        <!-- Spans all columns to ensure true window centering -->
         <TextBlock Name="TitleTextBlock"
-                  Grid.Column="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="3"
                   Text="{Binding #Root.TitleText}"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   FontSize="16"
                   FontWeight="SemiBold"
-                  Foreground="{DynamicResource TextPrimaryBrush}"/>
+                  Foreground="{DynamicResource TextPrimaryBrush}"
+                  IsHitTestVisible="False"/>
 
-        <!-- Right-Aligned Week/Time Display (Optional) -->
-        <TextBlock Name="TitleTime"
-                  Grid.Column="2"
-                  Text="{Binding #Root.TimeText}"
-                  HorizontalAlignment="Right"
-                  VerticalAlignment="Center"
-                  FontSize="16"
-                  Margin="0,0,8,0"
-                  Foreground="{DynamicResource TextPrimaryBrush}"/>
+        <!-- Right Side Content -->
+        <StackPanel Grid.Column="2"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Right">
+            
+            <!-- Week/Time Display (Right - for macOS) -->
+            <TextBlock Name="TitleTimeRight"
+                      Text="{Binding #Root.TimeText}"
+                      VerticalAlignment="Center"
+                      FontSize="16"
+                      Foreground="{DynamicResource TextPrimaryBrush}"
+                      Margin="0,0,12,0"
+                      IsVisible="False"/>
+
+            <!-- Windows/Linux Window Control Buttons -->
+            <controls:WindowsWindowButtons Name="WindowsControls"
+                                          ShowIconsOnHover="True"
+                                          IsVisible="False"/>
+        </StackPanel>
     </Grid>
 </UserControl>
 

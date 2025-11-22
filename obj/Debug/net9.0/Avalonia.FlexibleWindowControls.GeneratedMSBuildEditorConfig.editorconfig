@@ -15,23 +15,17 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Avalonia.FlexibleWindowControls
-build_property.ProjectDir = c:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\
+build_property.ProjectDir = C:\Users\Josef\Documents\Github\CustomAvaloniaTitlebar\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[c:/Users/Josef/Documents/Github/CustomAvaloniaTitlebar/Controls/CustomTitleBar.axaml]
+[C:/Users/Josef/Documents/Github/CustomAvaloniaTitlebar/Controls/CustomTitleBar.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[c:/Users/Josef/Documents/Github/CustomAvaloniaTitlebar/Controls/MacOSWindowButtons.axaml]
+[C:/Users/Josef/Documents/Github/CustomAvaloniaTitlebar/Controls/MacOSWindowButtons.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[c:/Users/Josef/Documents/Github/CustomAvaloniaTitlebar/Controls/WindowsWindowButtons.axaml]
-build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
-
-[c:/Users/Josef/Documents/Github/CustomAvaloniaTitlebar/Demo/App.axaml]
-build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
-
-[c:/Users/Josef/Documents/Github/CustomAvaloniaTitlebar/Demo/MainWindow.axaml]
+[C:/Users/Josef/Documents/Github/CustomAvaloniaTitlebar/Controls/WindowsWindowButtons.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

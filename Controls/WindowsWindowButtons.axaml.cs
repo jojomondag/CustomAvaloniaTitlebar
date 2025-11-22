@@ -203,4 +203,43 @@ public partial class WindowsWindowButtons : UserControl
         ShowIconsOnHover = enable;
         ShowAllHoverIcons();
     }
+
+    public Rect? GetMaximizeButtonBounds()
+    {
+        if (_maximizeButton == null || !IsVisible)
+            return null;
+
+        var topLeft = _maximizeButton.PointToScreen(new Point(0, 0));
+        var bottomRight = _maximizeButton.PointToScreen(new Point(_maximizeButton.Bounds.Width, _maximizeButton.Bounds.Height));
+        
+        // Convert pixel coordinates to logical if needed, but PointToScreen returns platform pixels which is what we usually want for Win32 APIs
+        // However, PointToScreen returns PixelPoint, we need to convert to something usable or just return the rect in pixels.
+        // Let's return a Rect in screen pixels.
+        
+        return new Rect(
+            topLeft.X, 
+            topLeft.Y, 
+            bottomRight.X - topLeft.X, 
+            bottomRight.Y - topLeft.Y);
+    }
+
+    public void SetMaximizeHover(bool hover)
+    {
+        if (_maximizeButton == null) return;
+
+        if (hover)
+        {
+            if (!_maximizeButton.Classes.Contains("NativeHover"))
+            {
+                _maximizeButton.Classes.Add("NativeHover");
+            }
+        }
+        else
+        {
+            if (_maximizeButton.Classes.Contains("NativeHover"))
+            {
+                _maximizeButton.Classes.Remove("NativeHover");
+            }
+        }
+    }
 }

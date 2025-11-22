@@ -26,6 +26,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Demo\**" />
+    <EmbeddedResource Remove="Demo\**" />
+    <None Remove="Demo\**" />
+    <AvaloniaResource Remove="Demo\**" />
+    <AvaloniaXaml Remove="Demo\**" />
+    <Page Remove="Demo\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AvaloniaResource Include="Icons\**\*.svg" />
   </ItemGroup>
 </Project>
