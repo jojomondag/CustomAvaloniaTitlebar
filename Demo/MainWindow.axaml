@@ -9,7 +9,6 @@
         ShowInTaskbar="True"
         CanResize="True"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="40"
         WindowStartupLocation="CenterScreen">
     <Grid>

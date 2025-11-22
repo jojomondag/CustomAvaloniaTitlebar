@@ -93,14 +93,7 @@
                ToolTip.Tip="Maximize"
                HorizontalAlignment="Left"
                VerticalAlignment="Center">
-            <Button.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Enter Full Screen" Click="OnEnterFullScreenClick"/>
-                    <Separator/>
-                    <MenuItem Header="Tile Window to Left of Screen" Click="OnTileLeftClick"/>
-                    <MenuItem Header="Tile Window to Right of Screen" Click="OnTileRightClick"/>
-                </ContextMenu>
-            </Button.ContextMenu>
+
             <Button.Styles>
                 <Style Selector="Button">
                     <Setter Property="Template">

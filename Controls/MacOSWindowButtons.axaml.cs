@@ -6,6 +6,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using Avalonia.Input;
+using Avalonia.Threading;
 using SvgControl = Avalonia.Svg.Skia.Svg;
 
 namespace Avalonia.FlexibleWindowControls.Controls;
@@ -91,9 +93,11 @@ public partial class MacOSWindowButtons : UserControl
                 Debug.WriteLine("Maximize button clicked!");
                 ToggleMaximize();
             };
-            // Add pointer events for long-press detection
-            _maximizeButton.AddHandler(InputElement.PointerPressedEvent, OnMaximizePointerPressed, RoutingStrategies.Tunnel);
-            _maximizeButton.AddHandler(InputElement.PointerReleasedEvent, OnMaximizePointerReleased, RoutingStrategies.Tunnel);
+            // Native buttons handle interaction now
+            // _maximizeButton.AddHandler(InputElement.PointerPressedEvent, OnMaximizePointerPressed, RoutingStrategies.Tunnel);
+            // _maximizeButton.AddHandler(InputElement.PointerReleasedEvent, OnMaximizePointerReleased, RoutingStrategies.Tunnel);
+            // _maximizeButton.PointerEntered += OnMaximizePointerEntered;
+            // _maximizeButton.PointerExited += OnMaximizePointerExited;
         }
         else
         {
@@ -156,112 +160,14 @@ public partial class MacOSWindowButtons : UserControl
 
         Debug.WriteLine($"ToggleMaximize called. Platform: {RuntimeInformation.OSDescription}, IsOSX: {RuntimeInformation.IsOSPlatform(OSPlatform.OSX)}");
 
-        // On macOS, use window tiling instead of standard maximize
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            Debug.WriteLine("Calling TileWindowLeftOnMac()");
-            TileWindowLeftOnMac();
-        }
-        else
-        {
-            // On other platforms, use standard maximize behavior
-            Debug.WriteLine("Using standard maximize behavior (not macOS)");
-            _parentWindow.WindowState = _parentWindow.WindowState == WindowState.Maximized
-                ? WindowState.Normal
-                : WindowState.Maximized;
-        }
+        // Use standard maximize behavior on all platforms
+        Debug.WriteLine("Using standard maximize behavior");
+        _parentWindow.WindowState = _parentWindow.WindowState == WindowState.Maximized
+            ? WindowState.Normal
+            : WindowState.Maximized;
     }
 
-    /// <summary>
-    /// Invokes the macOS Sequoia window tiling feature to move the frontmost window.
-    /// </summary>
-    private void TileWindowLeftOnMac()
-    {
-        Debug.WriteLine("TileWindowLeftOnMac() called");
-        
-        // 1. Check if we are actually running on macOS
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            // Not on a Mac, so just do nothing.
-            Debug.WriteLine("Not running on macOS, returning early");
-            return;
-        }
 
-        Debug.WriteLine("Running on macOS, proceeding with AppleScript");
-
-        // 2. Define the AppleScript command
-        // You can change "Left" to "Right", "Top Left Quarter", "Bottom Right Quarter", etc.
-        string appleScript = @"
-        tell application ""System Events""
-            tell (first process whose frontmost is true)
-                tell menu bar 1
-                    tell menu bar item ""Window""
-                        tell menu ""Window""
-                            tell menu item ""Move & Resize""
-                                tell menu ""Move & Resize""
-                                    click menu item ""Left""
-                                end tell
-                            end tell
-                        end tell
-                    end tell
-                end tell
-            end tell
-        end tell";
-
-        Debug.WriteLine($"AppleScript prepared: {appleScript}");
-
-        // 3. Set up the process to run "osascript"
-        var process = new Process
-        {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName = "/usr/bin/osascript",
-                RedirectStandardInput = true, // We will pipe the script in
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            }
-        };
-
-        // 4. Start the process, write the script to it, and wait for it to exit
-        try
-        {
-            Debug.WriteLine("Starting osascript process...");
-            process.Start();
-            Debug.WriteLine("Process started, writing AppleScript to StandardInput...");
-            process.StandardInput.Write(appleScript);
-            process.StandardInput.Close(); // Signal that we're done writing
-            Debug.WriteLine("Waiting for process to exit...");
-            // Use WaitForExit with timeout to prevent hanging (5 second timeout)
-            if (!process.WaitForExit(5000))
-            {
-                Debug.WriteLine("Process did not exit within timeout, killing it...");
-                try
-                {
-                    process.Kill();
-                }
-                catch { }
-            }
-            Debug.WriteLine($"Process exited with code: {process.ExitCode}");
-        }
-        catch (Exception ex)
-        {
-            // Log or handle the error (e.g., osascript not found)
-            Debug.WriteLine($"Error executing AppleScript: {ex.Message}");
-            Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-        }
-        finally
-        {
-            try
-            {
-                if (process != null && !process.HasExited)
-                {
-                    process.Kill();
-                }
-            }
-            catch { }
-            process?.Dispose();
-        }
-    }
 
     private void OnWindowStateChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
@@ -363,66 +269,7 @@ public partial class MacOSWindowButtons : UserControl
         }
     }
 
-    private void OnEnterFullScreenClick(object? sender, RoutedEventArgs e)
-    {
-        ToggleMaximize();
-    }
 
-    private void OnTileLeftClick(object? sender, RoutedEventArgs e)
-    {
-        if (_parentWindow == null) return;
-        
-        var screen = _parentWindow.Screens.ScreenFromWindow(_parentWindow) ?? _parentWindow.Screens.Primary;
-        if (screen != null)
-        {
-            var workingArea = screen.WorkingArea;
-            _parentWindow.WindowState = WindowState.Normal;
-            _parentWindow.Position = new PixelPoint(workingArea.X, workingArea.Y);
-            _parentWindow.Width = workingArea.Width / 2;
-            _parentWindow.Height = workingArea.Height;
-        }
-    }
 
-    private void OnTileRightClick(object? sender, RoutedEventArgs e)
-    {
-        if (_parentWindow == null) return;
-        
-        var screen = _parentWindow.Screens.ScreenFromWindow(_parentWindow) ?? _parentWindow.Screens.Primary;
-        if (screen != null)
-        {
-            var workingArea = screen.WorkingArea;
-            _parentWindow.WindowState = WindowState.Normal;
-            _parentWindow.Position = new PixelPoint(workingArea.X + workingArea.Width / 2, workingArea.Y);
-            _parentWindow.Width = workingArea.Width / 2;
-            _parentWindow.Height = workingArea.Height;
-        }
-    }
-
-    // Long-press implementation
-    private DateTime _pressTime;
-    private bool _isPressed;
-
-    private void OnMaximizePointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
-    {
-        _isPressed = true;
-        _pressTime = DateTime.Now;
-        
-        // Start a timer to check for long press
-        DispatcherTimer.RunOnce(() =>
-        {
-            if (_isPressed && (DateTime.Now - _pressTime).TotalMilliseconds >= 500)
-            {
-                // Open ContextMenu
-                if (_maximizeButton?.ContextMenu != null)
-                {
-                    _maximizeButton.ContextMenu.Open(_maximizeButton);
-                }
-            }
-        }, TimeSpan.FromMilliseconds(500));
-    }
-
-    private void OnMaximizePointerReleased(object? sender, Avalonia.Input.PointerReleasedEventArgs e)
-    {
-        _isPressed = false;
-    }
+    // AlignToNativeButtons removed as we are using native buttons directly.
 }

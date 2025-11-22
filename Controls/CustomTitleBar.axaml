@@ -15,16 +15,19 @@
         <!-- Left Side Content -->
         <StackPanel Grid.Column="0" 
                     Orientation="Horizontal"
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     Margin="12,0,0,0">
             
-            <!-- macOS Window Control Buttons -->
+            <!-- macOS Window Control Buttons (Hidden, using native) -->
             <controls:MacOSWindowButtons Name="MacOSControls"
                                         ButtonSize="12"
                                         ButtonSpacing="8"
                                         ShowIconsOnHover="True"
                                         IsVisible="False"
                                         Margin="0,0,12,0"/>
+            
+            <!-- Spacer for Native Buttons -->
+            <Border Width="70" IsVisible="{Binding #Root.IsMacOS}"/>
             
             <!-- Week/Time Display (Left - for Windows) -->
             <TextBlock Name="TitleTimeLeft"

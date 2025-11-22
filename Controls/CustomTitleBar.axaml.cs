@@ -28,6 +28,18 @@ public partial class CustomTitleBar : UserControl
     private MacOSWindowButtons? _macOSControls;
     private WindowsWindowButtons? _windowsControls;
     private bool _isMacOS;
+    
+    public static readonly DirectProperty<CustomTitleBar, bool> IsMacOSProperty =
+        AvaloniaProperty.RegisterDirect<CustomTitleBar, bool>(
+            nameof(IsMacOS),
+            o => o.IsMacOS);
+
+    public bool IsMacOS
+    {
+        get => _isMacOS;
+        private set => SetAndRaise(IsMacOSProperty, ref _isMacOS, value);
+    }
+    
     private PlatformStyle _currentPlatformStyle = PlatformStyle.Auto;
 
     public static readonly StyledProperty<string> TitleTextProperty =
@@ -97,11 +109,11 @@ public partial class CustomTitleBar : UserControl
         // Determine platform style
         if (_currentPlatformStyle == PlatformStyle.Auto)
         {
-            _isMacOS = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+            IsMacOS = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
         }
         else
         {
-            _isMacOS = _currentPlatformStyle == PlatformStyle.MacOS;
+            IsMacOS = _currentPlatformStyle == PlatformStyle.MacOS;
         }
         
         // Apply the initial platform style
@@ -193,7 +205,8 @@ public partial class CustomTitleBar : UserControl
         if (_isMacOS)
         {
             // macOS Style: Icons Left, Week Right
-            _macOSControls.IsVisible = true;
+            // We use native buttons now, so hide custom controls
+            _macOSControls.IsVisible = false;
             _windowsControls.IsVisible = false;
             
             if (_titleTimeLeft != null) _titleTimeLeft.IsVisible = false;
@@ -221,12 +234,12 @@ public partial class CustomTitleBar : UserControl
         // Determine if macOS style
         if (style == PlatformStyle.Auto)
         {
-            _isMacOS = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+            IsMacOS = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
         }
         else
         {
             // macOS uses macOS style, Windows and Linux both use Windows/Linux style
-            _isMacOS = style == PlatformStyle.MacOS;
+            IsMacOS = style == PlatformStyle.MacOS;
         }
         
         ApplyPlatformStyle();
@@ -251,4 +264,3 @@ public partial class CustomTitleBar : UserControl
         }
     }
 }
-

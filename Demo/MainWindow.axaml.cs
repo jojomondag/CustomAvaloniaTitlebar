@@ -87,27 +87,32 @@ public partial class MainWindow : Window
            _windowsIconDisplayArea.IsVisible = style == PlatformStyle.Windows || style == PlatformStyle.Linux;
     }
 
+    private void SetupMacOSNativeButtons()
+    {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            return;
+
+        // We are using standard native buttons now.
+        // Avalonia's ExtendClientAreaToDecorationsHint="True" usually keeps them visible but in the titlebar area.
+        // We just need to ensure we don't hide them.
+        
+        // No P/Invoke needed to hide them anymore.
+    }
+
     protected override void OnOpened(System.EventArgs e)
     {
         base.OnOpened(e);
+        
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            SetupMacOSNativeButtons();
+        }
 
         // Hook into WndProc for Windows Snap Layout support
         if (OperatingSystem.IsWindows())
         {
             var topLevel = Avalonia.Controls.TopLevel.GetTopLevel(this);
             var platformImpl = topLevel?.PlatformImpl;
-            
-            // We need to access the underlying window handle and WndProc
-            // Avalonia doesn't expose WndProc directly in a cross-platform way, 
-            // but we can use reflection or specific platform interfaces if available.
-            // However, for a cleaner approach with standard Avalonia, we might need to use P/Invoke 
-            // to subclass the window or use a library that exposes this.
-            // 
-            // Fortunately, Avalonia.Win32 exposes a way to set a WndProc callback if we cast to the right type,
-            // but that requires adding a dependency on Avalonia.Win32 which might not be desirable if we want to keep it clean.
-            //
-            // A common workaround in Avalonia for this specific "Snap Layout" feature without adding heavy dependencies
-            // is to use the standard Win32 SetWindowLongPtr to hook the WndProc.
             
             var handle = this.TryGetPlatformHandle();
             if (handle != null)
@@ -118,6 +123,9 @@ public partial class MainWindow : Window
             }
         }
     }
+    
+    // ... (Existing Windows code) ...
+
 
     private IntPtr _hwnd;
     private IntPtr _oldWndProc;
@@ -222,5 +230,67 @@ public partial class MainWindow : Window
         }
 
         return CallWindowProc(_oldWndProc, hWnd, msg, wParam, lParam);
+    }
+}
+
+internal static class MacOSNativeInterop
+{
+    private const string ObjCLibrary = "/usr/lib/libobjc.dylib";
+    private const string AppKitLibrary = "/System/Library/Frameworks/AppKit.framework/AppKit";
+
+    [DllImport(ObjCLibrary, EntryPoint = "objc_msgSend")]
+    public static extern IntPtr IntPtr_objc_msgSend(IntPtr receiver, IntPtr selector);
+
+    [DllImport(ObjCLibrary, EntryPoint = "objc_msgSend")]
+    public static extern IntPtr IntPtr_objc_msgSend_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1);
+
+    [DllImport(ObjCLibrary, EntryPoint = "objc_msgSend")]
+    public static extern void void_objc_msgSend_Double(IntPtr receiver, IntPtr selector, double arg1);
+
+    // For structs larger than 16 bytes (like CGRect on some archs) or specific ABIs, we might need st_ret.
+    // On ARM64 (Apple Silicon), small structs like CGRect are returned in registers, so standard P/Invoke works.
+    // On x64, it might be different.
+    // However, for this demo, we assume standard behavior or ARM64.
+    [DllImport(ObjCLibrary, EntryPoint = "objc_msgSend")]
+    public static extern CGRect CGRect_objc_msgSend(IntPtr receiver, IntPtr selector);
+
+    [DllImport(ObjCLibrary, EntryPoint = "sel_registerName")]
+    public static extern IntPtr GetSelector(string name);
+
+    public enum NSWindowButton
+    {
+        CloseButton = 0,
+        MiniaturizeButton = 1,
+        ZoomButton = 2
+    }
+
+    public static IntPtr GetStandardWindowButton(IntPtr nsWindow, NSWindowButton button)
+    {
+        var sel = GetSelector("standardWindowButton:");
+        return IntPtr_objc_msgSend_IntPtr(nsWindow, sel, (IntPtr)button);
+    }
+
+    public static void SetAlphaValue(IntPtr nsView, double alpha)
+    {
+        var sel = GetSelector("setAlphaValue:");
+        void_objc_msgSend_Double(nsView, sel, alpha);
+    }
+
+    public static IntPtr GetSuperview(IntPtr nsView)
+    {
+        var sel = GetSelector("superview");
+        return IntPtr_objc_msgSend(nsView, sel);
+    }
+
+    public static CGRect GetFrame(IntPtr nsView)
+    {
+        var sel = GetSelector("frame");
+        return CGRect_objc_msgSend(nsView, sel);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct CGRect
+    {
+        public double X, Y, Width, Height;
     }
 }
