@@ -91,6 +91,9 @@ public partial class MacOSWindowButtons : UserControl
                 Debug.WriteLine("Maximize button clicked!");
                 ToggleMaximize();
             };
+            // Add pointer events for long-press detection
+            _maximizeButton.AddHandler(InputElement.PointerPressedEvent, OnMaximizePointerPressed, RoutingStrategies.Tunnel);
+            _maximizeButton.AddHandler(InputElement.PointerReleasedEvent, OnMaximizePointerReleased, RoutingStrategies.Tunnel);
         }
         else
         {
@@ -317,5 +320,109 @@ public partial class MacOSWindowButtons : UserControl
                 OnPointerEntered(null, null!);
             }
         }
+    }
+    /// <summary>
+    /// Gets the screen coordinates of the maximize button if visible
+    /// </summary>
+    public Rect? GetMaximizeButtonBounds()
+    {
+        if (_maximizeButton == null || !_maximizeButton.IsVisible)
+            return null;
+
+        var topLeft = _maximizeButton.PointToScreen(new Point(0, 0));
+        var bottomRight = _maximizeButton.PointToScreen(new Point(_maximizeButton.Bounds.Width, _maximizeButton.Bounds.Height));
+        
+        // Convert pixel coordinates to logical coordinates if needed, but PointToScreen returns pixels which is what we want for Windows API
+        // However, we need to return a Rect in screen coordinates
+        
+        return new Rect(
+            new Point(topLeft.X, topLeft.Y),
+            new Point(bottomRight.X, bottomRight.Y));
+    }
+
+    /// <summary>
+    /// Manually sets the hover state of the maximize button.
+    /// This is used when the window is handling WM_NCHITTEST and returning HTMAXBUTTON,
+    /// which bypasses standard Avalonia pointer events.
+    /// </summary>
+    public void SetMaximizeHover(bool hover)
+    {
+        if (_maximizeIcon == null) return;
+
+        if (hover)
+        {
+            bool isMaximized = _parentWindow?.WindowState == WindowState.Maximized;
+            _maximizeIcon.Path = isMaximized
+                ? "avares://Avalonia.FlexibleWindowControls/Icons/MacOS/maximize-contract-hover.svg"
+                : "avares://Avalonia.FlexibleWindowControls/Icons/MacOS/maximize-expand-hover.svg";
+        }
+        else
+        {
+            // Reset to normal state
+            _maximizeIcon.Path = "avares://Avalonia.FlexibleWindowControls/Icons/MacOS/maximize-normal.svg";
+        }
+    }
+
+    private void OnEnterFullScreenClick(object? sender, RoutedEventArgs e)
+    {
+        ToggleMaximize();
+    }
+
+    private void OnTileLeftClick(object? sender, RoutedEventArgs e)
+    {
+        if (_parentWindow == null) return;
+        
+        var screen = _parentWindow.Screens.ScreenFromWindow(_parentWindow) ?? _parentWindow.Screens.Primary;
+        if (screen != null)
+        {
+            var workingArea = screen.WorkingArea;
+            _parentWindow.WindowState = WindowState.Normal;
+            _parentWindow.Position = new PixelPoint(workingArea.X, workingArea.Y);
+            _parentWindow.Width = workingArea.Width / 2;
+            _parentWindow.Height = workingArea.Height;
+        }
+    }
+
+    private void OnTileRightClick(object? sender, RoutedEventArgs e)
+    {
+        if (_parentWindow == null) return;
+        
+        var screen = _parentWindow.Screens.ScreenFromWindow(_parentWindow) ?? _parentWindow.Screens.Primary;
+        if (screen != null)
+        {
+            var workingArea = screen.WorkingArea;
+            _parentWindow.WindowState = WindowState.Normal;
+            _parentWindow.Position = new PixelPoint(workingArea.X + workingArea.Width / 2, workingArea.Y);
+            _parentWindow.Width = workingArea.Width / 2;
+            _parentWindow.Height = workingArea.Height;
+        }
+    }
+
+    // Long-press implementation
+    private DateTime _pressTime;
+    private bool _isPressed;
+
+    private void OnMaximizePointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    {
+        _isPressed = true;
+        _pressTime = DateTime.Now;
+        
+        // Start a timer to check for long press
+        DispatcherTimer.RunOnce(() =>
+        {
+            if (_isPressed && (DateTime.Now - _pressTime).TotalMilliseconds >= 500)
+            {
+                // Open ContextMenu
+                if (_maximizeButton?.ContextMenu != null)
+                {
+                    _maximizeButton.ContextMenu.Open(_maximizeButton);
+                }
+            }
+        }, TimeSpan.FromMilliseconds(500));
+    }
+
+    private void OnMaximizePointerReleased(object? sender, Avalonia.Input.PointerReleasedEventArgs e)
+    {
+        _isPressed = false;
     }
 }
