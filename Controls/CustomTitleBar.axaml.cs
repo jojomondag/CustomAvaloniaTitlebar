@@ -23,6 +23,24 @@ public partial class CustomTitleBar : UserControl
     public static readonly StyledProperty<string> TimeTextProperty =
         AvaloniaProperty.Register<CustomTitleBar, string>(nameof(TimeText), "");
 
+    private bool _isMacOS;
+    public bool IsMacOS
+    {
+        get => _isMacOS;
+        private set => SetAndRaise(IsMacOSProperty, ref _isMacOS, value);
+    }
+    public static readonly DirectProperty<CustomTitleBar, bool> IsMacOSProperty =
+        AvaloniaProperty.RegisterDirect<CustomTitleBar, bool>(nameof(IsMacOS), o => o.IsMacOS);
+
+    private bool _isWindows;
+    public bool IsWindows
+    {
+        get => _isWindows;
+        private set => SetAndRaise(IsWindowsProperty, ref _isWindows, value);
+    }
+    public static readonly DirectProperty<CustomTitleBar, bool> IsWindowsProperty =
+        AvaloniaProperty.RegisterDirect<CustomTitleBar, bool>(nameof(IsWindows), o => o.IsWindows);
+
     public string TitleText
     {
         get => GetValue(TitleTextProperty);
@@ -46,6 +64,9 @@ public partial class CustomTitleBar : UserControl
         _parentWindow = this.FindAncestorOfType<Window>();
         if (_parentWindow == null)
             return;
+
+        IsMacOS = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        IsWindows = !IsMacOS; // Treat anything not Mac as Windows-style for now (Linux/Windows)
 
         InitializeTitleBar();
     }
