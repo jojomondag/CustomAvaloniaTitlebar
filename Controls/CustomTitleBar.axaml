@@ -1,77 +1,44 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:controls="using:Avalonia.FlexibleWindowControls.Controls"
-             xmlns:svg="using:Avalonia.Svg.Skia"
-             x:Class="Avalonia.FlexibleWindowControls.Controls.CustomTitleBar"
+
+             x:Class="DemoApp.Controls.CustomTitleBar"
              x:Name="Root">
-    <Grid Name="TitleBarGrid"
-          Background="{DynamicResource HeaderBackgroundBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-
-        <!-- Left Side Content -->
-        <StackPanel Grid.Column="0" 
-                    Orientation="Horizontal"
-                    VerticalAlignment="Stretch"
-                    Margin="12,0,0,0">
+    <Border Background="{DynamicResource TitleBarBackgroundBrush}">
+        <Grid ColumnDefinitions="Auto,*,Auto" Margin="0">
             
-            <!-- macOS Window Control Buttons (Hidden, using native) -->
-            <controls:MacOSWindowButtons Name="MacOSControls"
-                                        ButtonSize="12"
-                                        ButtonSpacing="8"
-                                        ShowIconsOnHover="True"
-                                        IsVisible="False"
-                                        Margin="0,0,12,0"/>
-            
-            <!-- Spacer for Native Buttons -->
-            <Border Width="70" IsVisible="{Binding #Root.IsMacOS}"/>
-            
-            <!-- Week/Time Display (Left - for Windows) -->
-            <TextBlock Name="TitleTimeLeft"
-                      Text="{Binding #Root.TimeText}"
-                      VerticalAlignment="Center"
-                      FontSize="16"
-                      Foreground="{DynamicResource TextPrimaryBrush}"
-                      Margin="12,0,0,0"
-                      IsVisible="False"/>
-        </StackPanel>
+            <!-- Left Side: Spacer for Native Buttons -->
+            <StackPanel Grid.Column="0" 
+                        Orientation="Horizontal"
+                        VerticalAlignment="Stretch"
+                        Margin="12,0,0,0">
+                
+                <!-- Spacer for Native Buttons (Always visible on Mac, which is now the only target) -->
+                <Border Width="70" />
+            </StackPanel>
 
-        <!-- Centered Application Title -->
-        <!-- Spans all columns to ensure true window centering -->
-        <TextBlock Name="TitleTextBlock"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="3"
-                  Text="{Binding #Root.TitleText}"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  FontSize="16"
-                  FontWeight="SemiBold"
-                  Foreground="{DynamicResource TextPrimaryBrush}"
-                  IsHitTestVisible="False"/>
+            <!-- Center: Title -->
+            <TextBlock Grid.Column="1"
+                       Name="TitleTextBlock"
+                       Text="{Binding #Root.TitleText}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontWeight="SemiBold"
+                       FontSize="14"
+                       Foreground="{DynamicResource TextPrimaryBrush}"
+                       IsHitTestVisible="False"/>
 
-        <!-- Right Side Content -->
-        <StackPanel Grid.Column="2"
-                    Orientation="Horizontal"
-                    VerticalAlignment="Stretch"
-                    HorizontalAlignment="Right">
-            
-            <!-- Week/Time Display (Right - for macOS) -->
-            <TextBlock Name="TitleTimeRight"
-                      Text="{Binding #Root.TimeText}"
-                      VerticalAlignment="Center"
-                      FontSize="16"
-                      Foreground="{DynamicResource TextPrimaryBrush}"
-                      Margin="0,0,12,0"
-                      IsVisible="False"/>
-
-            <!-- Windows/Linux Window Control Buttons (Hidden, using native) -->
-            <controls:WindowsWindowButtons Name="WindowsControls"
-                                          ShowIconsOnHover="True"
-                                          IsVisible="False"/>
-        </StackPanel>
-    </Grid>
+            <!-- Right Side: Week Display -->
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,12,0">
+                <TextBlock Name="TitleTimeRight"
+                           Text="{Binding #Root.TimeText}"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>
-
