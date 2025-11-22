@@ -6,14 +6,16 @@
     <Border Background="{DynamicResource TitleBarBackgroundBrush}">
         <Grid ColumnDefinitions="Auto,*,Auto" Margin="0">
             
-            <!-- Left Side: Spacer for Native Buttons -->
+            <!-- Left Side: Week Display -->
             <StackPanel Grid.Column="0" 
                         Orientation="Horizontal"
-                        VerticalAlignment="Stretch"
+                        VerticalAlignment="Center"
                         Margin="12,0,0,0">
-                
-                <!-- Spacer for Native Buttons (Always visible on Mac, which is now the only target) -->
-                <Border Width="70" />
+                <TextBlock Name="TitleTimeLeft"
+                           Text="{Binding #Root.TimeText}"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           Foreground="{DynamicResource TextPrimaryBrush}"/>
             </StackPanel>
 
             <!-- Center: Title -->
@@ -27,18 +29,8 @@
                        Foreground="{DynamicResource TextPrimaryBrush}"
                        IsHitTestVisible="False"/>
 
-            <!-- Right Side: Week Display -->
-            <StackPanel Grid.Column="2"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Right"
-                        Margin="0,0,12,0">
-                <TextBlock Name="TitleTimeRight"
-                           Text="{Binding #Root.TimeText}"
-                           VerticalAlignment="Center"
-                           FontSize="14"
-                           Foreground="{DynamicResource TextPrimaryBrush}"/>
-            </StackPanel>
+            <!-- Right Side: Spacer for Native Buttons -->
+            <Border Grid.Column="2" Width="140" />
         </Grid>
     </Border>
 </UserControl>
